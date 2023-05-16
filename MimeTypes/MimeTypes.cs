@@ -147,7 +147,7 @@ namespace MimeTypes
         /// <param name="fileName">The name of the file.</param>
         /// <param name="mimeType">The MIME-type for the given file name.</param>
         /// <returns><c>true</c> if a MIME-type was found, <c>false</c> otherwise.</returns>
-        public static bool TryGetMimeType(string? fileName, [NotNullWhen(true)] out IEnumerable<string>? mimeTypes)
+        public static bool TryGetMimeType(string? fileName, out IEnumerable<string> mimeTypes)
         {
             if (fileName is null)
             {
