@@ -5,7 +5,7 @@ This project uses a copy of /etc/media.types file from the media-types linux pac
 # Usage
 
 ## Init
-The static constructor tries ti read the embedded ressource "mime.types.gz" of the executing assembly.
+The static constructor tries to read the embedded ressource "mime.types.gz" of the executing assembly.
 You can also use ReadMimeTypesFrom(Stream,..) to replace all mime types.
 
         ReadMimeTypesFrom(Stream stream, bool disposeStream = false)
@@ -21,7 +21,7 @@ Examples:
 ## GetMimeTypeExtensions
         IEnumerable<string> GetMimeTypeExtensions(string mimetype)
 Returns an IEnumerable<string> of all suffices for the specified mime type.
-  
+        
 ## GetMimeTypes
         1. IEnumerable<string> GetMimeTypes(string fileName)
         2. IEnumerable<string> GetMimeTypes()
@@ -37,3 +37,5 @@ Returns an IEnumerable<string> of all suffices for the specified mime type.
 True if the suffix is found. mimeTypes is a list of all found mime types.<br/>
 fileName must contain '.' for example "test.png" or ".png" or "/test/test.png" for "image/png".
   
+## Example
+        MimeTypes.MimeTypes.GetMimeType("test.png"); // returns { "image/png" }
