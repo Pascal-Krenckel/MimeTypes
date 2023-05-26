@@ -182,5 +182,47 @@ namespace MimeTypes
                 ? throw new ArgumentNullException(nameof(fileName))
                 : TryGetMimeType(fileName, out var result) ? result : Enumerable.Repeat(FallbackMimeType, 1);
         }
+
+        #region Common Mime Types
+        public static string SVG => "image/svg+xml";
+        public static string JPEG => "image/jpeg";
+        public static string JPG => JPEG;
+        public static string PNG => "image/png";
+        public static string TIFF => "image/tiff";
+        public static string AVIF => "image/avif";
+        public static string AAC => "audio/aac";
+        public static string AVI => "video/x-msvideo";
+        public static string BIN => "application/octet-stream";
+        public static string BMP => "image/bmp";
+
+        public static string CSS => "text/css";
+        public static string CSV => "text/csv";
+        public static string DOC => "application/msword";
+        public static string DOCX => "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
+        public static string GZ => "application/gzip";
+        public static string GIF => "image/gif";
+        public static string HTML => "text/html";
+        public static string ICO => "image/vnd.microsoft.icon";
+        public static string JAR => "application/java-archive";
+        public static string JS => "text/javascript";
+        public static string JSON => "application/json";
+
+        public static string MIDI => "audio/x-midi";
+
+        public static string MP3 => "audio/mp3";
+
+        public static string MP4 => "video/mp4";
+        public static string MPEG => "video/mpeg";
+        public static string OGA => "audio/ogg";
+        public static string OGV => "video/ogg";
+        public static string OPUS => "audio/opus";
+        public static string PDF => "application/pdf";
+
+        public static string PHP => "text/x-php";
+
+        public static string TXT => "text/plain";        
+
+        #endregion
+
     }
 }
