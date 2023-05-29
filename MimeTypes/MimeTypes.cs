@@ -220,9 +220,60 @@ namespace MimeTypes
 
         public static string PHP => "text/x-php";
 
-        public static string TXT => "text/plain";        
+        public static string TXT => "text/plain";
 
         #endregion
 
+        /// <summary>
+        /// Returns true if one possible mimetype starts with "video/"
+        /// </summary>
+        /// <param name="filename">The name or full path of the file.</param>
+        /// <returns>True if any possible mime type starts with "video/"</returns>
+        public static bool IsVideo(string filename)
+        {
+            return GetMimeTypes(filename).Any(mimetype => mimetype.StartsWith("video/", StringComparison.InvariantCultureIgnoreCase));
+        }
+
+        /// <summary>
+        /// Returns true if one possible mimetype starts with "audio/"
+        /// </summary>
+        /// <param name="filename">The name or full path of the file.</param>
+        /// <returns>True if any possible mime type starts with "audio/"</returns>
+        public static bool IsAudio(string filename)
+        {
+            return GetMimeTypes(filename).Any(mimetype => mimetype.StartsWith("audio/", StringComparison.InvariantCultureIgnoreCase));
+        }
+
+        /// <summary>
+        /// Returns true if one possible mimetype starts with "image/"
+        /// </summary>
+        /// <param name="filename">The name or full path of the file.</param>
+        /// <returns>True if any possible mime type starts with "image/"</returns>
+        public static bool IsImage(string filename)
+        {
+            return GetMimeTypes(filename).Any(mimetype => mimetype.StartsWith("image/", StringComparison.InvariantCultureIgnoreCase));
+        }
+
+        /// <summary>
+        /// Returns true if one possible mimetype starts with "text/"
+        /// </summary>
+        /// <param name="filename">The name or full path of the file.</param>
+        /// <returns>True if any possible mime type starts with "text/"</returns>
+        public static bool IsText(string filename)
+        {
+            return GetMimeTypes(filename).Any(mimetype => mimetype.StartsWith("text/", StringComparison.InvariantCultureIgnoreCase));
+        }
+
+        /// <summary>
+        /// Returns true if one possible mimetype is either audio, video or image
+        /// </summary>
+        /// <param name="filename">The name or full path of the file.</param>
+        /// <returns>True if any possible mime type starts with "video/", "audio/" or "image/"</returns>
+        public static bool IsMedia(string filename)
+        {
+            return GetMimeTypes(filename).Any(mimetype => mimetype.StartsWith("video/", StringComparison.InvariantCultureIgnoreCase)
+            || mimetype.StartsWith("audio/", StringComparison.InvariantCultureIgnoreCase)
+            || mimetype.StartsWith("image/", StringComparison.InvariantCultureIgnoreCase));
+        }
     }
 }
