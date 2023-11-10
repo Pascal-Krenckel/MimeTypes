@@ -18,10 +18,13 @@ namespace MimeTypes
         [AllowNull]
         public static string FallbackMimeType { get => _fallbackMimeType ?? FALLBACK_MIMETYPE; set => _fallbackMimeType = value; }
 
-        private static readonly Dictionary<string,Range> typeIndexMap = new(StringComparer.OrdinalIgnoreCase);
-        private static readonly List<string> mimeTypes = new();
+        private static ILookup<string,string> mimeTypes;
+        private static ILookup<string,string> suffixes;
+
         static MimeTypes()
         {
+            mimeTypes = Enumerable.Empty<string>().ToLookup(s => s);
+            suffixes = Enumerable.Empty<string>().ToLookup(s => s);
             var execAss = Assembly.GetExecutingAssembly();
             string ressName = execAss.GetManifestResourceNames().Where(name => name.EndsWith("mime.types.gz",StringComparison.OrdinalIgnoreCase)).FirstOrDefault();
             if (!string.IsNullOrEmpty(ressName))
@@ -60,24 +63,24 @@ namespace MimeTypes
             try
             {
                 using System.IO.Compression.GZipStream gzip = new(stream,System.IO.Compression.CompressionMode.Decompress,true);
-                var typeMap = ReadStream(gzip);
-                CreateStaticVariables(typeMap);
+                mimeTypes = ReadStream(gzip);
             }
             catch (System.IO.InvalidDataException)
             {
                 _ = stream.Seek(0, SeekOrigin.Begin);
-                var typeMap = ReadStream(stream);
-                CreateStaticVariables(typeMap);
+                mimeTypes = ReadStream(stream);
             }
             finally
             {
                 if (disposeStream) stream.Dispose();
+                if (mimeTypes != null)
+                    suffixes = mimeTypes.SelectMany(group => group.Select(ext => (group.Key, ext))).ToLookup(pair => pair.ext, pair => pair.Key, StringComparer.OrdinalIgnoreCase);
             }
         }
 
-        private static Dictionary<string, List<string>> ReadStream(Stream stream)
+        private static ILookup<string, string> ReadStream(Stream stream)
         {
-            Dictionary<string,List<string>> typeMap = new(StringComparer.OrdinalIgnoreCase);
+            List<(string key,string extensions)> data = new();
             using var sr = new StreamReader(stream);
             string? line;
             while ((line = sr.ReadLine()) != null)
@@ -87,35 +90,12 @@ namespace MimeTypes
                 if (string.IsNullOrWhiteSpace(line)) continue;
                 string[] parts =  line.Split(new[] {' ', '\t' ,',', ';'}, StringSplitOptions.RemoveEmptyEntries);
                 if (parts.Length > 1)
-                    for (int i = 1; i < parts.Length; i++)
-                    {
-                        if (typeMap.ContainsKey(parts[i]))
-                            typeMap[parts[i]].Add(parts[0]);
-                        else
-                        {
-                            var list = new List<string>
-                            {
-                                parts[0]
-                            };
-                            typeMap.Add(parts[i], list);
-                        }
-                    }
+                    for (int i = 1; i < parts.Length; i++)                    
+                        data.Add((parts[0],parts[i]));             
             }
-            return typeMap;
+            return data.ToLookup(data => data.key, data=> data.extensions,StringComparer.OrdinalIgnoreCase);
         }
 
-        private static void CreateStaticVariables(Dictionary<string, List<string>> typeMap)
-        {
-            mimeTypes.Clear();
-            typeIndexMap.Clear();
-            foreach (var keyValue in typeMap)
-            {
-                int start = mimeTypes.Count;
-                mimeTypes.AddRange(keyValue.Value.Distinct());
-                int end = mimeTypes.Count;
-                typeIndexMap.Add(keyValue.Key, new Range(start, end));
-            }
-        }
 
         /// <summary>
         /// Attempts to fetch all available file extensions for a MIME-type.
@@ -128,18 +108,14 @@ namespace MimeTypes
             {
                 throw new ArgumentNullException(nameof(mimeType));
             }
-            int i = -1;
-            while ((i = mimeTypes.FindIndex(i + 1, (string element) => element.Equals(mimeType, StringComparison.OrdinalIgnoreCase))) >= 0)
-            {
-                yield return typeIndexMap.Where(kv => i >= kv.Value.Start.Value && i < kv.Value.End.Value).First().Key;
-            }
+            return mimeTypes[mimeType];
         }
 
         /// <summary>
         /// Fetches all available MIME-types.
         /// </summary>
         /// <returns>All available MIME-types</returns>
-        public static IEnumerable<string> GetMimeTypes() => mimeTypes.Distinct();
+        public static IEnumerable<string> GetMimeTypes() => mimeTypes.Select(group => group.Key);
 
         /// <summary>
         /// Tries to get the MIME-type for the given file name.
@@ -159,13 +135,9 @@ namespace MimeTypes
 
             if (dotIndex != -1 && fileName.Length > dotIndex + 1)
             {
-                if (typeIndexMap.TryGetValue(fileName[(dotIndex + 1)..], out Range range))
-                {
-                    mimeTypes = MimeTypes.mimeTypes.Skip(range.Start.Value).Take(range.End.Value - range.Start.Value);
-                    return true;
-                }
+                mimeTypes = MimeTypes.suffixes[fileName[(dotIndex + 1)..]];
+                return mimeTypes.Any();
             }
-
             mimeTypes = Enumerable.Empty<string>();
             return false;
         }
