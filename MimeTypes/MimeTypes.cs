@@ -23,8 +23,8 @@ namespace MimeTypes
 
         static MimeTypes()
         {
-            mimeTypes = Enumerable.Empty<string>().ToLookup(s => s);
-            suffixes = Enumerable.Empty<string>().ToLookup(s => s);
+            mimeTypes = Enumerable.Empty<string>().ToLookup(s => s, StringComparer.OrdinalIgnoreCase);
+            suffixes = Enumerable.Empty<string>().ToLookup(s => s,StringComparer.OrdinalIgnoreCase);
             var execAss = Assembly.GetExecutingAssembly();
             string ressName = execAss.GetManifestResourceNames().Where(name => name.EndsWith("mime.types.gz",StringComparison.OrdinalIgnoreCase)).FirstOrDefault();
             if (!string.IsNullOrEmpty(ressName))
