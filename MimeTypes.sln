@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.5.33627.172
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MimeTypes", "MimeTypes\MimeTypes.csproj", "{FF0289BE-28DD-480A-81B1-22A086C1ACA8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MimeTypesTest", "MimeTypesTest\MimeTypesTest.csproj", "{699D7957-8515-43E9-B1D3-78F353694111}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{FF0289BE-28DD-480A-81B1-22A086C1ACA8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FF0289BE-28DD-480A-81B1-22A086C1ACA8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FF0289BE-28DD-480A-81B1-22A086C1ACA8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FF0289BE-28DD-480A-81B1-22A086C1ACA8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{699D7957-8515-43E9-B1D3-78F353694111}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{699D7957-8515-43E9-B1D3-78F353694111}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{699D7957-8515-43E9-B1D3-78F353694111}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{699D7957-8515-43E9-B1D3-78F353694111}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {32FE6A34-1814-4608-AB8A-809E84F695FA}
+	EndGlobalSection
+EndGlobal
